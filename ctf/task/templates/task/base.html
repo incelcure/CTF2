@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CTF Tasks</title>
+    <link rel="stylesheet" href="{% static 'task/styles.css' %}">
+</head>
+<body>
+    <header>
+        <div class="logo">LOGO</div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'task_list' %}">TASKS</a></li>
+                <li><a href="#">RULES</a></li>
+                <li><a href="#">LEADERBOARD</a></li>
+                <li><a href="#">ABOUT</a></li>
+                <li><a href="#">LOGIN</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>Footer Content</p>
+    </footer>
+</body>
+</html>

@@ -10,8 +10,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import *
 
+
 def task_list_view(request):
     tasks = Task.objects.all()
-    return render(request, 'task_list.html', {'tasks': tasks})
+    return render(request, 'task/task_list.html', {'tasks': tasks})
 
 
+def task_detail_view(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    if request.method == 'POST':
+        user_answer = request.POST.get('answer')
+        if user_answer == task.answer:
+            return HttpResponse('Correct answer!')
+        else:
+            return HttpResponse('Incorrect answer.')
+    return render(request, 'task/task_detail.html', {'task': task})

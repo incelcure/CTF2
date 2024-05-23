@@ -1,0 +1,12 @@
+{% extends 'task/base.html' %}
+
+{% block content %}
+<h1>TASKS</h1>
+<div class="tasks-grid">
+    {% for task in tasks %}
+    <div class="task-item">
+        <a href="{% url 'task_detail' task.id %}">{{ task.title }}</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'task/base.html' %}
+
+{% block content %}
+<h1>{{ task.title }}</h1>
+<p>{{ task.description }}</p>
+{% if task.file_url %}
+    <p><a href="{{ task.file_url }}">Download file</a></p>
+{% endif %}
+<form method="post">
+    {% csrf_token %}
+    <label for="answer">Your answer:</label>
+    <input type="text" id="answer" name="answer">
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}
