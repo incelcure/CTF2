@@ -10,13 +10,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import *
 
+def task_list_view(request):
+    tasks = Task.objects.all()
+    return render(request, 'task_list.html', {'tasks': tasks})
 
-class TaskHome(ListView):
-    model = Task
-    template_name = 'tasks/index.html'
-    context_object_name = 'tasks'
 
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     c_def = self.get_user_context(title="Главная страница")
-    #     return dict(list(context.items()) + list(c_def.items()))
