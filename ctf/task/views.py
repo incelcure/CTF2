@@ -25,3 +25,7 @@ def task_detail_view(request, task_id):
         else:
             return HttpResponse('Incorrect answer.')
     return render(request, 'task/task_detail.html', {'task': task})
+
+
+def rules_view(request):
+    return render(request, 'task/rules.html')
