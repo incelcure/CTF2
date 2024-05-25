@@ -50,12 +50,15 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
+
 def leaderboard_view(request):
     leaderboard = (Attempt.objects.filter(correct=True)
                    .values('user__username')
                    .annotate(score=Sum('task__points'))
                    .order_by('-score'))
     return render(request, 'task/leaderboard.html', {'leaderboard': leaderboard})
+
+
 def task_list_view(request):
     tasks = Task.objects.all()
     return render(request, 'task/task_list.html', {'tasks': tasks})
