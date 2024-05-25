@@ -11,12 +11,17 @@
         <div class="logo">LOGO</div>
         <nav>
             <ul>
-                <li><a>LOGO<a/></a></li>
                 <li><a href="{% url 'task_list' %}">TASKS</a></li>
                 <li><a href="{% url 'rules' %}">RULES</a></li>
                 <li><a href="#">LEADERBOARD</a></li>
                 <li><a href="#">ABOUT</a></li>
-                <li><a href="#">LOGIN</a></li>
+                {% if user.is_authenticated %}
+                    <li>Welcome, {{ user.username }}!</li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>

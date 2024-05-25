@@ -8,6 +8,7 @@ class Task(models.Model):
     description = models.TextField(blank=True, verbose_name="Описание задачи")
     file_url = models.URLField(max_length=200, blank=True, null=True)
     answer = models.CharField(max_length=200, blank=True, null=True)
+    points = models.PositiveIntegerField(default=0)
 
     def get_absolute_url(self):
         return f"/task/{self.id}/"
