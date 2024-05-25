@@ -1,0 +1,21 @@
+{% extends 'task/base.html' %}
+
+{% block content %}
+<h1>Leaderboard</h1>
+<table>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in leaderboard %}
+        <tr>
+            <td>{{ entry.user__username }}</td>
+            <td>{{ entry.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

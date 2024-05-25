@@ -13,7 +13,7 @@
             <ul>
                 <li><a href="{% url 'task_list' %}">TASKS</a></li>
                 <li><a href="{% url 'rules' %}">RULES</a></li>
-                <li><a href="#">LEADERBOARD</a></li>
+                <li><a href="{% url 'leaderboard' %}">LEADERBOARD</a></li>
                 <li><a href="#">ABOUT</a></li>
                 {% if user.is_authenticated %}
                     <li>Welcome, {{ user.username }}!</li>
