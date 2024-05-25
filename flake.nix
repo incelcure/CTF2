@@ -10,7 +10,7 @@
       imports = [
       ];
       systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
-      perSystem = { config, self', inputs', pkgs, system, ... }:
+      perSystem = args@{ config, self', inputs', pkgs, system, ... }:
         let
           p2n = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs; };
           projectDir = ./.;
@@ -26,10 +26,14 @@
         in
         {
           packages.default = p2n.mkPoetryApplication { inherit overrides projectDir; };
+          packages.env = self'.packages.default.dependencyEnv;
+
+          packages.image = import ./nix/image.nix args;
 
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               (p2n.mkPoetryEnv { inherit overrides projectDir; })
+              just
               poetry
             ];
           };
