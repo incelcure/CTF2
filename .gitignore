@@ -30,3 +30,10 @@ build/
 venv
 venv*
 venv/
+
+### direnv
+.direnv
+.envrc
+
+### nix
+result
