@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -13,3 +14,13 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Attempt(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    correct = models.BooleanField()
+
+    def __str__(self):
+        return f"{self.user} - {self.task} - {'Correct' if self.correct else 'Incorrect'}"
