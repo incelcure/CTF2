@@ -38,6 +38,8 @@
             ];
           };
         };
-      flake = { };
+      flake = {
+        hydraJobs.build-image = inputs.self.packages.x86_64-linux.image;
+      };
     };
 }
