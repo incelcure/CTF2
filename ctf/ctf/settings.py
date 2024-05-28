@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,6 +26,15 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug tunix run nixpkgs#hydrogenrned on in production!
 DEBUG = True
+
+MINIO_URL = 's3.backyard-hg.xyz'
+MINIO_ACCESS_KEY = os.getenv('MINIO_ACCESS_KEY')
+MINIO_SECRET_KEY = os.getenv('MINIO_SECRET_KEY')
+MINIO_BUCKET_NAME = 'ctf'
+MINIO_SECURE = True  # use ssl
+
+MINIO_USER_ACCESS_KEY = os.getenv('MINIO_USER_ACCESS_KEY')
+MINIO_USER_SECRET_KEY = os.getenv('MINIO_USER_SECRET_KEY')
 
 ALLOWED_HOSTS = []
 

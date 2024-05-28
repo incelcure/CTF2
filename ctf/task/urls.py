@@ -4,6 +4,7 @@ from django.views.decorators.cache import cache_page
 from .views import *
 
 urlpatterns = [
+    path('', rules_view, name='index'),
     path('tasks/', task_list_view, name='task_list'),
     path('task/<int:task_id>', task_detail_view, name='task_detail'),
     path('rules/', rules_view, name='rules'),
