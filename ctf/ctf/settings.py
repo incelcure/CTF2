@@ -24,8 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug tunix run nixpkgs#hydrogenrned on in production!
-DEBUG = True
+# USAGE: DJANGO_DEBUG='t'
+DEBUG = os.getenv('DJANGO_DEBUG', str(False)).lower() in ('true', '1', 't')
+
+# USAGE: ALLOWED_HOSTS='127.0.0.1,172.0.0.2'
+allowed_hosts_str = os.getenv('ALLOWED_HOSTS', '')
+ALLOWED_HOSTS = allowed_hosts_str.split(',')
 
 MINIO_URL = 's3.backyard-hg.xyz'
 MINIO_ACCESS_KEY = os.getenv('MINIO_ACCESS_KEY')
@@ -35,8 +39,6 @@ MINIO_SECURE = True  # use ssl
 
 MINIO_USER_ACCESS_KEY = os.getenv('MINIO_USER_ACCESS_KEY')
 MINIO_USER_SECRET_KEY = os.getenv('MINIO_USER_SECRET_KEY')
-
-ALLOWED_HOSTS = []
 
 # Application definition
 
