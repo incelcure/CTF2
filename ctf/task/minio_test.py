@@ -57,14 +57,10 @@ def list_objects_from_minio():
         for obj in objects:
             print(obj.object_name)
             print(obj)
-            print(obj.read().decode())
     except S3Error as e:
         print(f'Error: {e}')
 
 
-# print("goool")
-# # Test the upload and download functions
-# if __name__ == "__main__":
 upload_file_to_minio()
 get_file_from_minio()
 list_objects_from_minio()

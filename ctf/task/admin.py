@@ -10,7 +10,7 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['title', 'description']
+        fields = ['title', 'description', 'answer']
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -36,6 +36,6 @@ class TaskForm(forms.ModelForm):
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     form = TaskForm
-    list_display = ['title', 'description', 'file_url']
+    list_display = ['title', 'description', 'file_url', 'answer']
 
-#admin.site.register(Task, TaskAdmin)
+

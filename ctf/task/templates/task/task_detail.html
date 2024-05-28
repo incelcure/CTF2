@@ -4,7 +4,8 @@
 <h1>{{ task.title }}</h1>
 <p>{{ task.description }}</p>
 {% if task.file_url %}
-    <p><a href="{{ task.file_url }}">Download file</a></p>
+    <p><a href="{{ task.file_url }}" target="_blank">Download file</a></p>
+    <p><img src="{{ task.file_url }}" alt="{{ task.title }}" style="max-width: 100%; height: auto;"></p>
 {% endif %}
 <form method="post">
     {% csrf_token %}
