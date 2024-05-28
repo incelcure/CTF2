@@ -21,10 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug tunix run nixpkgs#hydrogenrned on in production!
-DEBUG = True
+# USAGE: DJANGO_DEBUG='t'
+DEBUG = os.getenv('DJANGO_DEBUG', str(False)).lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = []
+# USAGE: ALLOWED_HOSTS='127.0.0.1,172.0.0.2'
+allowed_hosts_str = os.getenv('ALLOWED_HOSTS', '')
+ALLOWED_HOSTS = allowed_hosts_str.split(',')
 
 # Application definition
 
