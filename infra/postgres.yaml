@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.28.0-standalone-strict/deployment-apps-v1.json
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,6 +31,7 @@ spec:
         - name: postgresdata
           persistentVolumeClaim:
             claimName: postgres-volume-claim
+
 ---
 
 apiVersion: v1
@@ -54,5 +56,6 @@ metadata:
 spec:
   ports:
     - port: 5432
+      name: db
   selector:
     app: postgres
