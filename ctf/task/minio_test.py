@@ -13,8 +13,10 @@ def upload_file_to_minio():
     )
 
     bucket_name = settings.MINIO_BUCKET_NAME
-    file_name = "bruh.txt"
-    file_content = "This is a test bruh."
+    file_name = "task3.json"
+    with open(r"{BASE_DIR}/task3.json", 'r') as f:
+        file_content = f.read()
+    # file_content = "This is a test bruh."
 
     # Ensure the bucket exists
     if not minio_client.bucket_exists(bucket_name):

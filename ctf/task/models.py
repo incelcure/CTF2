@@ -1,12 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from ctf import settings
+
 
 # Create your models here.
 class Task(models.Model):
     title = models.CharField(max_length=255, verbose_name="Заголовок")
     description = models.TextField(blank=True, verbose_name="Описание задачи")
-    file_url = models.URLField(max_length=200, blank=True, null=True)
+    file_name = models.CharField(max_length=255, blank=True, null=True)
+    # file_url = models.URLField(max_length=200, blank=True, null=True)
     answer = models.CharField(max_length=200, blank=True, null=True)
     points = models.PositiveIntegerField(default=0)
 
@@ -15,6 +18,12 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def file_url(self):
+        if self.file_name:
+            return f"{settings.MINIO_URL}/{settings.MINIO_BUCKET_NAME}/{self.file_name}"
+        return None
 
 
 class Attempt(models.Model):
