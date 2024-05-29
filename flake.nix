@@ -35,6 +35,8 @@
               (p2n.mkPoetryEnv { inherit overrides projectDir; })
               just
               poetry
+              kubectl
+              yaml-language-server
             ];
           };
         };
