@@ -13,7 +13,6 @@
       perSystem = args@{ config, self', inputs', pkgs, system, ... }:
         let
           p2n = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs; };
-          projectDir = ./.;
           overrides = p2n.defaultPoetryOverrides.extend
             (final: prev: {
               postgres = prev.postgres.overridePythonAttrs (old: {
@@ -23,18 +22,26 @@
                 buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
               });
             });
+          p2n-args = {
+            inherit overrides;
+            projectDir = inputs.nixpkgs.lib.sourceByRegex
+              ./.
+              ["ctf.*" "poetry.lock" "pyproject.toml" "README.md"];
+          };
         in
         {
-          packages.default = p2n.mkPoetryApplication { inherit overrides projectDir; };
+          packages.default = p2n.mkPoetryApplication p2n-args;
           packages.env = self'.packages.default.dependencyEnv;
 
           packages.image = import ./nix/image.nix args;
 
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
-              (p2n.mkPoetryEnv { inherit overrides projectDir; })
+              (p2n.mkPoetryEnv p2n-args)
               just
               poetry
+              kubectl
+              yaml-language-server
             ];
           };
         };

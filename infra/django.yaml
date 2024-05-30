@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: django
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: django
+    spec:
+      containers:
+      - name: django
+        image: localhost:5001/ctf:latest
+        envFrom:
+        - configMapRef:
+            name: django-dev-settings
+        - configMapRef:
+            name: postgres-config
+        - configMapRef:
+            name: postgres-secret
+        - configMapRef:
+            name: django-secret
+        ports:
+        - containerPort: 8000
+
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.28.0-standalone-strict/service-v1.json
+apiVersion: v1
+kind: Service
+metadata:
+  name: django
+  labels:
+    app.kubernetes.io/name: django
+spec:
+  selector:
+    app.kubernetes.io/name: django
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
+
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.28.0-standalone-strict/ingress-networking-v1.json
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: django-ingress
+  labels:
+    app.kubernetes.io/name: django-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: django
+                port:
+                  number: 80
