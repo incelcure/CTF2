@@ -13,17 +13,17 @@ def upload_file_to_minio():
     )
 
     bucket_name = settings.MINIO_BUCKET_NAME
-    file_name = "task3.json"
-    with open(r"{BASE_DIR}/task3.json", 'r') as f:
+    file_name = "logo.png"
+    with open(f'/home/harpoon/Source/django/logo.png', 'rb') as f:
         file_content = f.read()
     # file_content = "This is a test bruh."
-
+    print('goods')
     # Ensure the bucket exists
     if not minio_client.bucket_exists(bucket_name):
         minio_client.make_bucket(bucket_name)
 
     # Upload the file
-    minio_client.put_object(bucket_name, file_name, data=io.BytesIO(file_content.encode()), length=len(file_content))
+    minio_client.put_object(bucket_name, file_name, data=io.BytesIO(file_content), length=len(file_content))
 
     print(f"Uploaded {file_name} to {bucket_name}")
 

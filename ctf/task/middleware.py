@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-allowed_hosts_admin_str = os.getenv('ALLOWED_HOSTS_FOR_METRICS_AND_ADMIN', '')
-ALLOWED_HOSTS_FOR_METRICS_AND_ADMIN = allowed_hosts_admin_str.split(',')
+unrestricted_hosts_str = os.getenv('UNRESTRICTED_HOSTS', '')
+UNRESTRICTED_HOSTS = unrestricted_hosts_str.split(',')
 
 
 class MetricsMiddleware(MiddlewareMixin):
@@ -42,6 +42,6 @@ class HostFilterMiddleware:
     def process_request(self, request):
         host = request.get_host()
         if request.path.startswith('/metrics') or request.path.startswith('/admin'):
-            if host not in ALLOWED_HOSTS_FOR_METRICS_AND_ADMIN:
+            if host not in UNRESTRICTED_HOSTS:
                 return HttpResponseForbidden("Access forbidden: Host not allowed")
         return None
