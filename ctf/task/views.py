@@ -1,18 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Sum
-from django.shortcuts import render
 from django.contrib.auth import logout, login, authenticate
-from django.contrib.auth.views import LoginView
-from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, FormView
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .forms import UserRegisterForm
 from .models import *
+from .metrics import registration_counter, login_counter, attempt_counter
 
 
 def register_view(request):
@@ -20,6 +15,7 @@ def register_view(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
+            registration_counter.inc()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
             return redirect('login')
@@ -37,6 +33,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                login_counter.inc()
                 return redirect('task_list')
             else:
                 messages.error(request, 'Invalid username or password.')
@@ -70,6 +67,7 @@ def task_detail_view(request, task_id):
     if request.method == 'POST':
         user_answer = request.POST.get('answer')
         correct = user_answer == task.answer
+        attempt_counter.inc()
         Attempt.objects.create(user=request.user, task=task, correct=correct)
         if correct:
             messages.success(request, 'Correct answer!')
