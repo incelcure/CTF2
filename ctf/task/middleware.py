@@ -1,7 +1,15 @@
+import os
 import time
 from django.utils.deprecation import MiddlewareMixin
 from prometheus_client import Counter
 from .metrics import request_latency_histogram, response_size_histogram, server_error_counter, client_error_counter
+from django.http import HttpResponseForbidden
+from dotenv import load_dotenv
+
+load_dotenv()
+
+allowed_hosts_admin_str = os.getenv('ALLOWED_HOSTS_FOR_METRICS_AND_ADMIN', '')
+ALLOWED_HOSTS_FOR_METRICS_AND_ADMIN = allowed_hosts_admin_str.split(',')
 
 
 class MetricsMiddleware(MiddlewareMixin):
@@ -19,3 +27,21 @@ class MetricsMiddleware(MiddlewareMixin):
             client_error_counter.inc()
 
         return response
+
+
+class HostFilterMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.process_request(request)
+        if response is None:
+            response = self.get_response(request)
+        return response
+
+    def process_request(self, request):
+        host = request.get_host()
+        if request.path.startswith('/metrics') or request.path.startswith('/admin'):
+            if host not in ALLOWED_HOSTS_FOR_METRICS_AND_ADMIN:
+                return HttpResponseForbidden("Access forbidden: Host not allowed")
+        return None
