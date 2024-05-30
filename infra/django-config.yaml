@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: django-dev-settings
+data:
+  ALLOWED_HOSTS: "*"
+  DJANGO_DEBUG: "t"
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: django-prod-settings
+data:
+  ALLOWED_HOSTS: "127.0.0.1,ctf.backyard-hg.xyz"
+  DJANGO_DEBUG: "f"
