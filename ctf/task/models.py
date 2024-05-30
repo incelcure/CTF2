@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from .minio_client import get_presigned_url
 from ctf import settings
 
 
@@ -22,7 +22,7 @@ class Task(models.Model):
     @property
     def file_url(self):
         if self.file_name:
-            return f"{settings.MINIO_URL}/{settings.MINIO_BUCKET_NAME}/{self.file_name}"
+            return get_presigned_url(self.file_name)
         return None
 
 
