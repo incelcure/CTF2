@@ -20,9 +20,9 @@ spec:
             name: django-dev-settings
         - configMapRef:
             name: postgres-config
-        - configMapRef:
+        - secretRef:
             name: postgres-secret
-        - configMapRef:
+        - secretRef:
             name: django-secret
         ports:
         - containerPort: 8000
