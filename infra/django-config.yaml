@@ -4,7 +4,8 @@ metadata:
   name: django-dev-settings
 data:
   ALLOWED_HOSTS: "*"
-  DJANGO_DEBUG: "t"
+  UNRESTRICT_INTERFACES: '1'
+  DJANGO_DEBUG: '1'
 
 ---
 
@@ -14,4 +15,5 @@ metadata:
   name: django-prod-settings
 data:
   ALLOWED_HOSTS: "127.0.0.1,ctf.backyard-hg.xyz"
-  DJANGO_DEBUG: "f"
+  UNRESTRICT_INTERFACES: '1'
+  DJANGO_DEBUG: '0'
