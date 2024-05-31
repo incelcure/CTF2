@@ -7,32 +7,33 @@
     <link rel="stylesheet" href="{% static 'task/css/styles.css' %}">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><img src="{{ logo_url }}" alt="Logo" width="50" height="50"></li>
-                <li><a href="{% url 'task_list' %}">TASKS</a></li>
-                <li><a href="{% url 'rules' %}">RULES</a></li>
-                <li><a href="{% url 'leaderboard' %}">LEADERBOARD</a></li>
-<!--                <li><a href="#">ABOUT</a></li>-->
-                {% if user.is_authenticated %}
-                    <li>Welcome, {{ user.username }}!</li>
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
-                {% else %}
-                    <li><a href="{% url 'register' %}">Register</a></li>
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
+<header>
+    <nav>
+        <ul>
+            <li><img src="{{ logo_url }}" alt="Logo" width="50" height="50"></li>
+            <li><a href="{% url 'task_list' %}">TASKS</a></li>
+            <li><a href="{% url 'rules' %}">RULES</a></li>
+            <li><a href="{% url 'leaderboard' %}">LEADERBOARD</a></li>
+            <!--                <li><a href="#">ABOUT</a></li>-->
+            {% if user.is_authenticated %}
+            <li>Welcome, {{ user.username }}!</li>
+            <li><a href="{% url 'profile' %}">Профиль</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+            <li><a href="{% url 'register' %}">Register</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
 
-    <footer>
-        <p>Powered by ramp</p>
-    </footer>
+<footer>
+    <p>Powered by ramp</p>
+</footer>
 </body>
 </html>

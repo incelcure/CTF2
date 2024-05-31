@@ -1,0 +1,17 @@
+{% extends 'task/base.html' %}
+
+{% block content %}
+<h1>Профиль пользователя {{ user.username }}</h1>
+
+<h2>Общая информация</h2>
+<p>Количество выполненных задач: {{ completed_tasks|length }}</p>
+<p>Общее количество баллов: {{ total_points }}</p>
+
+<h2>Выполненные задачи</h2>
+<ul>
+    {% for task in completed_tasks %}
+    <p>{{ task.title }} - {{ task.points }} баллов</p>
+    {% endfor %}
+</ul>
+
+{% endblock %}

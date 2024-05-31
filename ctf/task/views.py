@@ -79,3 +79,14 @@ def task_detail_view(request, task_id):
 
 def rules_view(request):
     return render(request, 'task/rules.html')
+
+@login_required
+def profile_view(request):
+    completed_attempts = Attempt.objects.filter(user=request.user, correct=True).select_related('task')
+    total_points = completed_attempts.aggregate(Sum('task__points'))['task__points__sum'] or 0
+    completed_tasks = [attempt.task for attempt in completed_attempts]
+
+    return render(request, 'task/profile.html', {
+        'completed_tasks': completed_tasks,
+        'total_points': total_points,
+    })
