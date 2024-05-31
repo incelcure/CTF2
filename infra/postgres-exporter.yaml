@@ -12,6 +12,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: postgres-exporter
+        scrape: 'true'
     spec:
       containers:
         - name: postgres-exporter

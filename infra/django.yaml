@@ -11,6 +11,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: django
+        scrape: 'true'
     spec:
       containers:
       - name: django
