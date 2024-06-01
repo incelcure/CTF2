@@ -7,33 +7,56 @@
     <link rel="stylesheet" href="{% static 'task/css/styles.css' %}">
 </head>
 <body>
-<header>
-    <nav>
-        <ul>
-            <li><img src="{{ logo_url }}" width="50" height="50"></li>
-            <li><a href="{% url 'task_list' %}">Tasks</a></li>
-            <li><a href="{% url 'rules' %}">Rules</a></li>
-            <li><a href="{% url 'leaderboard' %}">Leaderboard</a></li>
-            <!--                <li><a href="#">ABOUT</a></li>-->
-            {% if user.is_authenticated %}
-            <li>Welcome, {{ user.username }}!</li>
-            <li><a href="{% url 'profile' %}">Pofile</a></li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
-            {% else %}
-            <li><a href="{% url 'register' %}">Register</a></li>
-            <li><a href="{% url 'login' %}">Login</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-</header>
+<div class="wrapper">
+    <header>
+        <nav>
+            <ul>
+                <li><img src="{{ logo_url }}" width="50" height="50"></li>
+                <li><a href="{% url 'task_list' %}">Tasks</a></li>
+                <li><a href="{% url 'rules' %}">Rules</a></li>
+                <li><a href="{% url 'leaderboard' %}">Leaderboard</a></li>
+                {% if user.is_authenticated %}
+                <li>Welcome, {{ user.username }}!</li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li><a href="{% url 'register' %}">Register</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
 
-<main>
-    {% block content %}
-    {% endblock %}
-</main>
+    <div class="messages-container">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
 
-<footer>
-    <p>Powered by ramp</p>
-</footer>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>Powered by ramp</p>
+    </footer>
+</div>
+
+<!-- Добавление скриптов для анимации сообщений -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const messages = document.querySelectorAll('.alert');
+    messages.forEach(function(message) {
+        setTimeout(function() {
+            message.classList.add('fade-out');
+        }, 3000);
+    });
+});
+</script>
 </body>
 </html>

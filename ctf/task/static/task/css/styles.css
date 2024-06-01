@@ -48,16 +48,25 @@ header nav ul li a:hover {
 main {
     padding: 20px;
     text-align: center;
+    flex-grow: 1;
 }
 
 footer {
+    flex-shrink: 0;
     background-color: #333;
     color: #fff;
     text-align: center;
     padding: 10px 0;
-    position: fixed;
     bottom: 0;
     width: 100%;
+    position: relative;
+}
+
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .task-grid {
@@ -135,4 +144,41 @@ form button {
 
 form button:hover {
     background-color: #218838;
+}
+
+.messages-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 80%;
+    max-width: 600px;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.alert.error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.alert.success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert.fade-out {
+    opacity: 0;
+    transform: translateY(20px);
 }

@@ -70,9 +70,9 @@ def task_detail_view(request, task_id):
         attempt_counter.inc()
         Attempt.objects.create(user=request.user, task=task, correct=correct)
         if correct:
-            messages.success(request, 'Correct answer!')
+            messages.success(request, 'И это правильный ответ! Крутите барабан!')
         else:
-            messages.error(request, 'Incorrect answer.')
+            messages.error(request, 'Ты тупее обезьяны!!!')
         return redirect('task_detail', task_id=task.id)
     return render(request, 'task/task_detail.html', {'task': task})
 
