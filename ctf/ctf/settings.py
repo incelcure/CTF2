@@ -48,6 +48,9 @@ MINIO_SECURE = True  # use ssl
 MINIO_USER_ACCESS_KEY = os.getenv('MINIO_USER_ACCESS_KEY')
 MINIO_USER_SECRET_KEY = os.getenv('MINIO_USER_SECRET_KEY')
 
+csrf_trusted_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+CSRF_TRUSTED_ORIGINS = csrf_trusted_origins.split(',')
+
 # Application definition
 
 INSTALLED_APPS = [
