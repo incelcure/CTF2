@@ -22,6 +22,8 @@ spec:
         - configMapRef:
             name: postgres-config
         - secretRef:
+            name: minio-secret
+        - secretRef:
             name: postgres-secret
         - secretRef:
             name: django-secret
