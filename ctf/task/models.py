@@ -30,7 +30,10 @@ class Attempt(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
-    correct = models.BooleanField()
+    correct = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('user', 'task')
 
     def __str__(self):
         return f"{self.user} - {self.task} - {'Correct' if self.correct else 'Incorrect'}"

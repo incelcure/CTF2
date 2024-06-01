@@ -64,21 +64,34 @@ def task_list_view(request):
 @login_required
 def task_detail_view(request, task_id):
     task = get_object_or_404(Task, id=task_id)
+    user = request.user
+
     if request.method == 'POST':
         user_answer = request.POST.get('answer')
         correct = user_answer == task.answer
         attempt_counter.inc()
-        Attempt.objects.create(user=request.user, task=task, correct=correct)
-        if correct:
-            messages.success(request, 'И это правильный ответ! Крутите барабан!')
+
+        attempt, created = Attempt.objects.get_or_create(user=user, task=task)
+
+        if correct and not attempt.correct:
+            attempt.correct = True
+            attempt.save()
+            messages.success(request, f'И это правильный ответ! На ваш счет зачислено {task.points} баллов!\nКрутите барабан!')
+        elif not attempt.correct:
+            attempt.correct = False
+            attempt.save()
+            messages.error(request, 'Неправильный ответ, попробуйте еще раз.')
         else:
-            messages.error(request, 'Ты тупее обезьяны!!!')
+            messages.success(request, 'Вы уже правильно ответили на эту задачу!')
+
         return redirect('task_detail', task_id=task.id)
+
     return render(request, 'task/task_detail.html', {'task': task})
 
 
 def rules_view(request):
     return render(request, 'task/rules.html')
+
 
 @login_required
 def profile_view(request):
