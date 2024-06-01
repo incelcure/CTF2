@@ -10,14 +10,14 @@
 <header>
     <nav>
         <ul>
-            <li><img src="{{ logo_url }}" alt="Logo" width="50" height="50"></li>
-            <li><a href="{% url 'task_list' %}">TASKS</a></li>
-            <li><a href="{% url 'rules' %}">RULES</a></li>
-            <li><a href="{% url 'leaderboard' %}">LEADERBOARD</a></li>
+            <li><img src="{{ logo_url }}" width="50" height="50"></li>
+            <li><a href="{% url 'task_list' %}">Tasks</a></li>
+            <li><a href="{% url 'rules' %}">Rules</a></li>
+            <li><a href="{% url 'leaderboard' %}">Leaderboard</a></li>
             <!--                <li><a href="#">ABOUT</a></li>-->
             {% if user.is_authenticated %}
             <li>Welcome, {{ user.username }}!</li>
-            <li><a href="{% url 'profile' %}">Профиль</a></li>
+            <li><a href="{% url 'profile' %}">Pofile</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
             {% else %}
             <li><a href="{% url 'register' %}">Register</a></li>

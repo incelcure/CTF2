@@ -1,5 +1,6 @@
 from minio import Minio
 from django.conf import settings
+from django.core.cache import cache
 
 
 def get_minio_client(admin=False):
@@ -20,7 +21,10 @@ def get_minio_client(admin=False):
 
 
 def get_presigned_url(file_name):
-    minio_client = get_minio_client()
-    bucket_name = settings.MINIO_BUCKET_NAME
-    url = minio_client.presigned_get_object(bucket_name, file_name)
+    url = cache.get(file_name)
+    if not url:
+        minio_client = get_minio_client()
+        bucket_name = settings.MINIO_BUCKET_NAME
+        url = minio_client.presigned_get_object(bucket_name, file_name)
+        cache.set(file_name, url, timeout=86400)
     return url

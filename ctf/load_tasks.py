@@ -11,7 +11,6 @@ from task.models import Task
 
 
 def load_tasks():
-
     minio_client = Minio(
         settings.MINIO_URL,
         access_key=settings.MINIO_ACCESS_KEY,
