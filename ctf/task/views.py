@@ -61,7 +61,7 @@ def task_list_view(request):
     return render(request, 'task/task_list.html', {'tasks': tasks})
 
 
-@login_required
+@login_required(redirect_field_name='next', login_url='/login/')
 def task_detail_view(request, task_id):
     task = get_object_or_404(Task, id=task_id)
     user = request.user
