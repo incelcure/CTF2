@@ -4,6 +4,7 @@ metadata:
   name: django-dev-settings
 data:
   ALLOWED_HOSTS: "*"
+  CSRF_TRUSTED_ORIGINS: 'https://ctf.backyard-hg.xyz'
   UNRESTRICT_INTERFACES: '1'
   DJANGO_DEBUG: '1'
 
@@ -14,6 +15,7 @@ kind: ConfigMap
 metadata:
   name: django-prod-settings
 data:
-  ALLOWED_HOSTS: "127.0.0.1,ctf.backyard-hg.xyz"
+  ALLOWED_HOSTS: "ctf.backyard-hg.xyz"
+  CSRF_TRUSTED_ORIGINS: 'https://ctf.backyard-hg.xyz'
   UNRESTRICT_INTERFACES: '1'
   DJANGO_DEBUG: '0'
