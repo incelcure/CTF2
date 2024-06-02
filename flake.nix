@@ -26,15 +26,15 @@
             inherit overrides;
             projectDir = inputs.nixpkgs.lib.sourceByRegex
               ./.
-              ["ctf.*" "poetry.lock" "pyproject.toml" "README.md"];
+              [ "ctf.*" "poetry.lock" "pyproject.toml" "README.md" ];
           };
         in
         {
-          packages.default = p2n.mkPoetryApplication p2n-args;
-          packages.env = self'.packages.default.dependencyEnv;
-
-          packages.image = import ./nix/image.nix args;
-
+          packages = (import ./nix/image.nix args) //
+            {
+              default = p2n.mkPoetryApplication p2n-args;
+              env = self'.packages.default.dependencyEnv;
+            };
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               (p2n.mkPoetryEnv p2n-args)
@@ -46,7 +46,7 @@
           };
         };
       flake = {
-        hydraJobs.build-image = inputs.self.packages.x86_64-linux.image;
+        hydraJobs.build-image = inputs.self.packages.x86_64-linux.server;
       };
     };
 }

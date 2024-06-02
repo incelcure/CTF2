@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: django-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: django
@@ -11,6 +11,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: django
+        scrape: 'true'
     spec:
       containers:
       - name: django
@@ -20,9 +21,11 @@ spec:
             name: django-dev-settings
         - configMapRef:
             name: postgres-config
-        - configMapRef:
+        - secretRef:
+            name: minio-secret
+        - secretRef:
             name: postgres-secret
-        - configMapRef:
+        - secretRef:
             name: django-secret
         ports:
         - containerPort: 8000
@@ -53,9 +56,10 @@ metadata:
   labels:
     app.kubernetes.io/name: django-ingress
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   rules:
-    - http:
+    - host: ctf.backyard-hg.xyz
+      http:
         paths:
           - path: /
             pathType: Prefix

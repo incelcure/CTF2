@@ -37,3 +37,6 @@ venv/
 
 ### nix
 result
+
+### infra
+*-secret.yaml
