@@ -58,7 +58,8 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - http:
+    - host: ctf.backyard-hg.xyz
+      http:
         paths:
           - path: /
             pathType: Prefix
