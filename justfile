@@ -1,6 +1,8 @@
+default:
+    @just --list
+
 push-image target="server":
   docker tag $(docker load < $(nix build --print-out-paths .#{{target}}) | cut -d' ' -f 3) localhost:5001/ctf:latest
-  docker push localhost:5001/ctf:latest
 
 run-container target="server":
   docker run -it $(docker load < $(nix build --print-out-paths .#{{target}}) | cut -d' ' -f 3)

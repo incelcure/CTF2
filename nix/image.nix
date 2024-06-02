@@ -27,4 +27,19 @@ in
       ExposedPorts = { "8000/tcp" = { }; };
     };
   };
+
+  casino = pkgs.dockerTools.buildImage {
+    name = "casino";
+
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      paths = with pkgs; [ self'.packages.casino ];
+      pathsToLink = [ "/bin" ];
+    };
+
+    config = {
+      Cmd = [ "casino" ];
+      ExposedPorts = { "3031/tcp" = { }; };
+    };
+  };
 }
