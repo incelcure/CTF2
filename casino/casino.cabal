@@ -67,7 +67,7 @@ common shared
     , aeson
     , appar
     , async
-    , base               >=4   && <5
+    , base                   >=4   && <5
     , base64-bytestring
     , bytestring
     , containers
@@ -79,10 +79,15 @@ common shared
     , http-types
     , jwt
     , memory
+    , monad-logger
     , mtl
     , optics-core
+    , persistent
+    , persistent-postgresql
     , profunctors
-    , relude             >=1.0
+    , relude                 >=1.0
+    , resourcet
+    , string-interpolate
     , text
     , time
     , with-utf8
@@ -93,10 +98,14 @@ library casino-lib
   import:          shared
   hs-source-dirs:  lib
   build-depends:
+    , yesod-auth
+    , yesod-core
 
   -- cabal-fmt: expand lib
   --
   exposed-modules:
+    Data.Casino.User
+    Data.Casino.SetRequest
 
 executable casino
   import:             shared
@@ -117,6 +126,7 @@ executable casino
     , yesod-auth
     , yesod-core
     , yesod-form
+    , yesod-persistent
 
 test-suite casino-test
   import:         shared

@@ -15,4 +15,6 @@ do *ARGS:
     ghcid -c "cabal repl lib:casino-lib" --warnings -T {{ARGS}}
 
 run:
-    ghcid -c "cabal repl exe:casino" --warnings -T :main
+  POSTGRES_PASSWORD=passwd POSTGRES_USER=postgres \
+  POSTGRES_DB=postgres PROVIDER_SECRET=secret \
+  ghcid -c "cabal repl exe:casino" --warnings -T :main
