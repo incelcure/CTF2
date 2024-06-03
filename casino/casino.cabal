@@ -106,6 +106,7 @@ library casino-lib
   exposed-modules:
     Data.Casino.User
     Data.Casino.SetRequest
+    Yesod.Auth.JWT
 
 executable casino
   import:             shared

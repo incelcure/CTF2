@@ -31,7 +31,7 @@ getSpins =
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
   setTitle "Casino"
-  u <- maybe (permissionDenied "") (return . entityVal) =<< maybeAuth
+  _ <- maybe (permissionDenied "") (return . entityVal) =<< maybeAuth
   r <- getUrlRenderParams
   [whamlet|
       <p #spins>

@@ -6,7 +6,7 @@ module Foundation where
 import Data.Casino.User
 import Database.Persist.Postgresql
 import Yesod.Auth
-import Yesod.Auth.Hardcoded
+import Yesod.Auth.JWT
 import Yesod.Auth.Message (AuthMessage (InvalidKeyTitle))
 import Yesod.Core
 import Yesod.Form (FormMessage, defaultFormMessage)
@@ -58,13 +58,13 @@ instance YesodAuth App where
   loginDest _ = HomeR
   logoutDest _ = HomeR
 
-  authPlugins _ = [authHardcoded]
+  authPlugins _ = [authJWT]
 
 instance YesodAuthPersist App
 
-instance YesodAuthHardcoded App where
+instance YesodAuthJWT App where
   doesUserNameExist n = liftHandler $ do
     a <- runDB $ getBy $ UniqueUserName n
     return $ isJust a
 
-  validatePassword _ p = return $ p == "password"
+  getJWTSecret = getsYesod secret

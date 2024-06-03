@@ -4,7 +4,7 @@ import Data.Casino.User
 import Data.Casino.SetRequest qualified as SR
 import Database.Persist
 import Foundation
-import Yesod.Auth (YesodAuth (maybeAuthId), maybeAuth)
+import Yesod.Auth (maybeAuth)
 import Yesod.Core
 import Yesod.Persist.Core
 
