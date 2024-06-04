@@ -25,6 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
+# CASINO EXPERIENCE
+CASINO_HOST = os.getenv('CASINO_HOST')
+JWT_SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+JWT_ALGORITHM = 'HS256'
+
 # USAGE: DJANGO_DEBUG='t'
 DEBUG = os.getenv('DJANGO_DEBUG', str(False)).lower() in ('true', '1', 't')
 
@@ -39,6 +44,7 @@ CACHES = {
     }
 }
 
+# MINIO envs
 MINIO_URL = 's3.backyard-hg.xyz'
 MINIO_ACCESS_KEY = os.getenv('MINIO_ACCESS_KEY')
 MINIO_SECRET_KEY = os.getenv('MINIO_SECRET_KEY')
@@ -48,6 +54,7 @@ MINIO_SECURE = True  # use ssl
 MINIO_USER_ACCESS_KEY = os.getenv('MINIO_USER_ACCESS_KEY')
 MINIO_USER_SECRET_KEY = os.getenv('MINIO_USER_SECRET_KEY')
 
+# CSRF Moment
 csrf_trusted_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
 CSRF_TRUSTED_ORIGINS = csrf_trusted_origins.split(',')
 
@@ -76,6 +83,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'task.middleware.HostFilterMiddleware',
     'task.middleware.MetricsMiddleware',
+    # 'task.middleware.TokenMapInitMiddleware',
     'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 

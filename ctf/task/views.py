@@ -4,10 +4,14 @@ from django.db.models import Sum
 from django.contrib.auth import logout, login, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.sessions.models import Session
+import pickle
 
 from .forms import UserRegisterForm
 from .models import *
 from .metrics import registration_counter, login_counter, attempt_counter
+# from .utils import TokenCache
+from .utils import get_user_token
 
 
 def register_view(request):
@@ -76,7 +80,8 @@ def task_detail_view(request, task_id):
         if correct and not attempt.correct:
             attempt.correct = True
             attempt.save()
-            messages.success(request, f'И это правильный ответ! На ваш счет зачислено {task.points} баллов!\nКрутите барабан!')
+            messages.success(request,
+                             f'И это правильный ответ! На ваш счет зачислено {task.points} баллов!\nКрутите барабан!')
         elif not attempt.correct:
             attempt.correct = False
             attempt.save()
@@ -99,7 +104,10 @@ def profile_view(request):
     total_points = completed_attempts.aggregate(Sum('task__points'))['task__points__sum'] or 0
     completed_tasks = [attempt.task for attempt in completed_attempts]
 
+    token = get_user_token(request, request.user.username)
+    casino_url = f"{settings.CASINO_HOST}/auth/page/jwt?token={token}"
     return render(request, 'task/profile.html', {
         'completed_tasks': completed_tasks,
         'total_points': total_points,
+        'casino_url': casino_url,
     })

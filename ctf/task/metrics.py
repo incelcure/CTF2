@@ -11,3 +11,6 @@ response_size_histogram = Histogram('django_response_size_bytes', 'Histogram of 
 
 server_error_counter = Counter('django_server_errors_total', 'Total number of server errors (500)')
 client_error_counter = Counter('django_client_errors_total', 'Total number of client errors (400)')
+
+jwt_cache_hit = Counter('django_jwt_cache_hit', 'Total number of jwt cache hits')
+jwt_cache_miss = Counter('django_jwt_cache_miss', 'Total number of jwt cache misses')
