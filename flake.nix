@@ -58,7 +58,7 @@
           packages.default = p2n.mkPoetryApplication p2n-args;
           packages.env = self'.packages.default.dependencyEnv;
 
-          packages.image = (import ./nix/image.nix args).ctf;
+          packages.image-ctf = (import ./nix/image.nix args).ctf;
           packages.image-casino = (import ./nix/image.nix args).casino;
 
           treefmt.config = {

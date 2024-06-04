@@ -7,6 +7,9 @@ author:        Head Gardener
 synopsis:      casino
 category:      Web
 
+extra-source-files:
+  static/styles.css
+
 -- description:
 
 -- bug-reports:
@@ -119,6 +122,7 @@ executable casino
   other-modules:
     Application
     Foundation
+    API
     Routes
 
   main-is:            Main.hs

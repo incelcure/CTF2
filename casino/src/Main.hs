@@ -21,9 +21,11 @@ main = do
     return
       [i|host=#{host} port=#{port} user=#{user} dbname=#{db} password=#{password}|]
 
+  staticDir <- fromMaybe "./static" <$> lookupEnv "STATIC_PATH"
   d <- maybe False (`elem` ["1", "true", "t"]) <$> lookupEnv "DEBUG"
   when d $ putStrLn "DEBUG"
-  stat <- if d then staticDevel "./static" else static "./static"
+  putStrLn staticDir
+  stat <- if d then staticDevel staticDir else static staticDir
 
   secr <- getEnv "PROVIDER_SECRET"
   runStderrLoggingT $ withPostgresqlPool connectionString openConnectionCount $ \p -> liftIO $ do

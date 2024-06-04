@@ -1,11 +1,12 @@
 default:
     @just --list
 
-push-image target="server":
-  docker tag $(docker load < $(nix build --print-out-paths .#{{target}}) | cut -d' ' -f 3) localhost:5001/ctf:latest
+push-image target="ctf":
+  docker tag $(docker load < $(nix build --print-out-paths .#image-{{target}}) | cut -d' ' -f 3) localhost:5001/{{target}}:latest
+  docker push localhost:5001/{{target}}:latest
 
-run-container target="server":
-  docker run -it $(docker load < $(nix build --print-out-paths .#{{target}}) | cut -d' ' -f 3)
+run-container target="ctf":
+  docker run -it $(docker load < $(nix build --print-out-paths .#image-{{target}}) | cut -d' ' -f 3)
 
 set-registry-addr reg:
   for f in $(rg -l 'localhost:5001/'); do sed -i $f -e 's,localhost:5001/,{{reg}},g'; done

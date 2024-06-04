@@ -10,7 +10,7 @@ let
 in
 
 {
-  server = pkgs.dockerTools.buildImage {
+  ctf = pkgs.dockerTools.buildImage {
     name = "ctf";
 
     copyToRoot = [
@@ -31,15 +31,22 @@ in
   casino = pkgs.dockerTools.buildImage {
     name = "casino";
 
-    copyToRoot = pkgs.buildEnv {
-      name = "image-root";
-      paths = with pkgs; [ self'.packages.casino ];
-      pathsToLink = [ "/bin" ];
-    };
+    copyToRoot = [
+      (pkgs.buildEnv {
+        name = "image-root";
+        paths = with pkgs; [
+          (pkgs.haskell.lib.justStaticExecutables self'.packages.casino)
+        ];
+        pathsToLink = [ "/bin" ];
+      })
+    ];
 
     config = {
       Cmd = [ "casino" ];
       ExposedPorts = { "3031/tcp" = { }; };
+      Env = [
+        "STATIC_PATH=${../casino/static}"
+      ];
     };
   };
 }
