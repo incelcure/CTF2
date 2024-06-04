@@ -1,16 +1,17 @@
 module API where
 
-import Prelude hiding (get)
 import Data.Casino.SetRequest qualified as SR
 import Data.Casino.SpinResult
 import Data.Casino.User
 import Database.Persist
 import Foundation
+import Web.JWT qualified as JWT
 import Yesod.Auth
 import Yesod.Core
 import Yesod.Persist.Core
+import Prelude hiding (get)
 
-maybeM :: Monad m => m b -> (a -> m b) -> m (Maybe a) -> m b
+maybeM :: (Monad m) => m b -> (a -> m b) -> m (Maybe a) -> m b
 maybeM n j x = maybe n j =<< x
 
 postSpinR :: Handler Value
@@ -23,10 +24,11 @@ postSpinR = runDB $ do
   case rew of
     Nothing -> pass
     Just r -> do
-      rk <- maybeM
-        (insert r)
-        (return . entityKey)
-        $ selectFirst [RewardType ==. rewardType r, RewardValue ==. rewardValue r] []
+      rk <-
+        maybeM
+          (insert r)
+          (return . entityKey)
+          $ selectFirst [RewardType ==. rewardType r, RewardValue ==. rewardValue r] []
       update k [CasinoUserRewards =. (rk : casinoUserRewards u)]
   returnJson rew
 
@@ -46,3 +48,16 @@ getSpinsR = do
   u <- maybe (permissionDenied "") (return . entityVal) =<< maybeAuth
   let c = max 0 (casinoUserPoints u - casinoUserSpent u)
   return $ object ["count" .= c]
+
+getRewardsR :: Handler Value
+getRewardsR = do
+  v <- JWT.toVerify . JWT.hmacSecret <$> getsYesod secret
+  t' <- runMaybeT $ do
+    t <- hoistMaybe =<< lift (lookupGetParam "token")
+    n <- hoistMaybe $ JWT.sub . JWT.claims =<< JWT.decodeAndVerifySignature v t
+    print n
+    hoistMaybe =<< lift (runDB $ getBy $ UniqueUserName $ show n)
+  rewardIds <-
+    maybe (permissionDenied "") (return . casinoUserRewards . entityVal) t'
+  rs <- runDB $ selectList [RewardId <-. rewardIds] []
+  returnJson $ fmap entityVal rs

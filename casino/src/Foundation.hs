@@ -22,6 +22,7 @@ mkYesodData
 /api/spins SpinsR GET
 /api/spin  SpinR POST
 /api/set   SetR POST
+/api/rewards RewardsR GET
 /auth      AuthR Auth getAuth
 |]
 

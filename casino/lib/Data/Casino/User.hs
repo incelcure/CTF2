@@ -1,13 +1,13 @@
+{-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE UndecidableInstances #-}
-{-# LANGUAGE DeriveAnyClass #-}
 
 module Data.Casino.User where
 
+import Data.Aeson
 import Database.Persist.Postgresql
 import Database.Persist.TH
-import Data.Aeson
 
 share
   [mkPersist sqlSettings, mkMigrate "migrateAll"]

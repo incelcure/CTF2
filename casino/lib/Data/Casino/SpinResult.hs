@@ -4,10 +4,10 @@
 module Data.Casino.SpinResult where
 
 import Data.Aeson
+import Data.Casino.User
 import Test.QuickCheck.Arbitrary
 import Test.QuickCheck.Gen
 import Text.Printf (printf)
-import Data.Casino.User
 
 newtype SpinResult = SpinResult (Maybe Reward)
   deriving stock (Show, Eq, Generic)
