@@ -7,6 +7,7 @@ import Database.Persist.Postgresql
 import Foundation
 import System.Environment (getEnv)
 import Yesod.Core
+import Yesod.Static
 
 main :: IO ()
 main = do
@@ -20,10 +21,14 @@ main = do
     return
       [i|host=#{host} port=#{port} user=#{user} dbname=#{db} password=#{password}|]
 
+  d <- maybe False (`elem` ["1", "true", "t"]) <$> lookupEnv "DEBUG"
+  when d $ putStrLn "DEBUG"
+  stat <- if d then staticDevel "./static" else static "./static"
+
   secr <- getEnv "PROVIDER_SECRET"
   runStderrLoggingT $ withPostgresqlPool connectionString openConnectionCount $ \p -> liftIO $ do
     _ <- runResourceT $ flip runSqlPool p $ do
       runMigration migrateAll
       us :: [Entity CasinoUser] <- selectList [] []
       when (null us) $ insert_ $ CasinoUser "test" 100 50 []
-    warp 3031 $ App p (fromString secr)
+    warp 3031 $ App p (fromString secr) stat

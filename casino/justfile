@@ -17,4 +17,5 @@ do *ARGS:
 run:
   POSTGRES_PASSWORD=passwd POSTGRES_USER=postgres \
   POSTGRES_DB=postgres PROVIDER_SECRET=secret \
+  DEBUG=0 \
   ghcid -c "cabal repl exe:casino" --warnings -T :main

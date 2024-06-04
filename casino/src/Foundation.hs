@@ -11,9 +11,16 @@ import Yesod.Auth.Message (AuthMessage (InvalidKeyTitle))
 import Yesod.Core
 import Yesod.Form (FormMessage, defaultFormMessage)
 import Yesod.Persist
+import Yesod.Static
 import Prelude hiding (get)
 
-data App = App {pool :: ConnectionPool, secret :: Text}
+data App = App
+  { pool :: ConnectionPool
+  , secret :: Text
+  , appStatic :: Static
+  }
+
+staticFiles "./static"
 
 mkYesodData
   "App"
@@ -24,6 +31,7 @@ mkYesodData
 /api/set   SetR POST
 /api/rewards RewardsR GET
 /auth      AuthR Auth getAuth
+/static    StaticR Static appStatic
 |]
 
 instance Yesod App where

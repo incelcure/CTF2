@@ -49,3 +49,4 @@ getHomeR = defaultLayout $ do
         <a href=@{AuthR LogoutR}>Logout
     |]
   toWidget getSpins
+  addStylesheet $ StaticR styles_css

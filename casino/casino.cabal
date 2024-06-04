@@ -130,6 +130,7 @@ executable casino
     , yesod-core
     , yesod-form
     , yesod-persistent
+    , yesod-static
 
 test-suite casino-test
   import:         shared
