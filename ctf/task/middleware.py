@@ -1,27 +1,10 @@
-import logging
-import os
 import time
 import fnmatch
-import ifaddr
-import pickle
 from django.utils.deprecation import MiddlewareMixin
 from prometheus_client import Counter
 from .metrics import request_latency_histogram, response_size_histogram, server_error_counter, client_error_counter
-from django.http import HttpRequest, HttpResponseForbidden
-from dotenv import load_dotenv
-# from .utils import TokenCache
-
-load_dotenv()
-
-unrestricted_hosts_str = os.getenv('UNRESTRICTED_HOSTS', '')
-UNRESTRICTED_HOSTS = list(filter(None, unrestricted_hosts_str.split(',')))
-RESTRICTED_ENDPOINTS = ['/metrics', '/admin']
-UNRESTRICT_INTERFACES = os.getenv('UNRESTRICT_INTERFACES', str(False)).lower() in ('true', '1', 't')
-
-if UNRESTRICT_INTERFACES:
-    for adapter in ifaddr.get_adapters():
-        for ip in adapter.ips:
-            UNRESTRICTED_HOSTS.append(ip.ip[0] if isinstance(ip.ip, tuple) else ip.ip)
+from django.http import HttpResponseForbidden
+from django.conf import settings
 
 
 class MetricsMiddleware(MiddlewareMixin):
@@ -51,23 +34,9 @@ class HostFilterMiddleware:
             response = self.get_response(request)
         return response
 
-    def process_request(self, request: HttpRequest):
+    def process_request(self, request):
         host = request.get_host().split(':')[0]
-        if any(request.path.startswith(x) for x in RESTRICTED_ENDPOINTS) \
-                and not any(fnmatch.fnmatch(host, x) for x in UNRESTRICTED_HOSTS):
+        if any(request.path.startswith(x) for x in settings.RESTRICTED_ENDPOINTS) \
+                and not any(fnmatch.fnmatch(host, x) for x in settings.UNRESTRICTED_HOSTS):
             return HttpResponseForbidden("Access forbidden: this endpoint is restricted")
         return None
-
-
-class TokenMapInitMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
-
-    def __call__(self, request):
-        if "jwt" not in request.session:
-            user_token_map = TokenCache()
-            # request.session['user_token_map'] = pickle.dumps(TokenCache())
-            request.session['user_token_map'] = user_token_map
-
-        response = self.get_response(request)
-        return response

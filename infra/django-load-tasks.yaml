@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.28.0-standalone-strict/job-batch-v1.json
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: django-load-tasks
+  labels:
+    app.kubernetes.io/name: django-load-tasks
+spec:
+  template:
+    metadata:
+      name: django-load-tasks
+      labels:
+        app.kubernetes.io/name: django-load-tasks
+    spec:
+      containers:
+        - name: django-load-tasks
+          image: localhost:5001/ctf:latest
+          command: ["python", "/load_tasks.py"]
+          envFrom:
+          - configMapRef:
+              name: django-dev-settings
+          - configMapRef:
+              name: postgres-config
+          - secretRef:
+              name: minio-secret
+          - secretRef:
+              name: postgres-secret
+      restartPolicy: OnFailure

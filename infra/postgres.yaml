@@ -20,7 +20,7 @@ spec:
           ports:
             - containerPort: 5432
           envFrom:
-          - configMapRef:
+          - secretRef:
               name: postgres-secret
           - configMapRef:
               name: postgres-config
@@ -43,7 +43,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 2Gi
 
 ---
 

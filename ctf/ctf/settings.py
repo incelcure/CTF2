@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
+import ifaddr
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -36,6 +37,18 @@ DEBUG = os.getenv('DJANGO_DEBUG', str(False)).lower() in ('true', '1', 't')
 # USAGE: ALLOWED_HOSTS='127.0.0.1,172.0.0.2'
 allowed_hosts_str = os.getenv('ALLOWED_HOSTS', '')
 ALLOWED_HOSTS = allowed_hosts_str.split(',')
+
+unrestricted_hosts_str = os.getenv('UNRESTRICTED_HOSTS', '')
+UNRESTRICTED_HOSTS = list(filter(None, unrestricted_hosts_str.split(',')))
+RESTRICTED_ENDPOINTS = ['/metrics', '/admin']
+UNRESTRICT_INTERFACES = os.getenv('UNRESTRICT_INTERFACES', str(False)).lower() in ('true', '1', 't')
+
+if UNRESTRICT_INTERFACES:
+    for adapter in ifaddr.get_adapters():
+        for ip in adapter.ips:
+            addr = ip.ip[0] if isinstance(ip.ip, tuple) else ip.ip
+            UNRESTRICTED_HOSTS.append(addr)
+            ALLOWED_HOSTS.append(addr)
 
 CACHES = {
     'default': {
@@ -83,7 +96,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'task.middleware.HostFilterMiddleware',
     'task.middleware.MetricsMiddleware',
-    # 'task.middleware.TokenMapInitMiddleware',
     'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 

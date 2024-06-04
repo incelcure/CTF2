@@ -43,6 +43,7 @@ wheel = "0.43.0"
 whitenoise = "^6.6.0"
 pyjwt = "^2.8.0"
 
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

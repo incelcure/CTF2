@@ -12,6 +12,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: postgres-exporter
+        scrape: 'true'
     spec:
       containers:
         - name: postgres-exporter
@@ -25,7 +26,10 @@ spec:
             - name: DATA_SOURCE_USER
               value: ctf
             - name: DATA_SOURCE_PASS
-              value: password
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: postgres-secret
 
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.28.0-standalone-strict/service-v1.json
