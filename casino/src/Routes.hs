@@ -1,6 +1,5 @@
 module Routes where
 
-import Data.Casino.User
 import Database.Persist
 import Foundation
 import Yesod.Auth
@@ -11,8 +10,16 @@ onclick =
   [julius|
     fetch('@{SpinR}', {
       method: 'POST'
-    }).then(r => r.text())
-      .then(d => ^{getSpins})
+    }).then(r => r.json())
+      .then(d => {
+        let li = document.createElement('li')
+        if (d === null)
+          li.innerHTML = `You got nothing`
+        else
+          li.innerHTML = `You got ${d.rewardType}: <span style="color: ${d.rewardValue};">${d.rewardValue}</spin>`
+        document.getElementById('rewards').prepend(li)
+        ^{getSpins}
+      })
       .catch(error => console.error('Error:', error))
     |]
 
@@ -23,7 +30,7 @@ getSpins =
       method: 'GET'
     }).then(r => r.json())
       .then(d => document.getElementById('spins').innerText =
-        `you have ${d.count} spins left`
+        `You have ${d.count} spins left`
       )
       .catch(error => console.error('Error:', error))
     |]
@@ -37,6 +44,7 @@ getHomeR = defaultLayout $ do
       <p #spins>
       <button onclick="#{renderJavascriptUrl r onclick}">
         Spin!
+      <ul #rewards>
       <p>
         <a href=@{AuthR LogoutR}>Logout
     |]

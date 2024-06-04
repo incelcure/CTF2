@@ -98,14 +98,16 @@ library casino-lib
   import:          shared
   hs-source-dirs:  lib
   build-depends:
+    , QuickCheck
     , yesod-auth
     , yesod-core
 
   -- cabal-fmt: expand lib
   --
   exposed-modules:
-    Data.Casino.User
     Data.Casino.SetRequest
+    Data.Casino.SpinResult
+    Data.Casino.User
     Yesod.Auth.JWT
 
 executable casino

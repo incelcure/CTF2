@@ -1,22 +1,20 @@
 module API where
 
-import Data.Casino.User
 import Data.Casino.SetRequest qualified as SR
+import Data.Casino.SpinResult
+import Data.Casino.User
 import Database.Persist
 import Foundation
 import Yesod.Auth (maybeAuth)
 import Yesod.Core
 import Yesod.Persist.Core
 
-postSpinR :: Handler Html
+postSpinR :: Handler Value
 postSpinR = do
   Entity k u <- maybe (permissionDenied "") return =<< maybeAuth
   when (casinoUserSpent u >= casinoUserPoints u) $ permissionDenied ""
   runDB $ update k [CasinoUserSpent +=. 1]
-  defaultLayout $ do
-    [whamlet|
-        <p> you spun the wheel!
-      |]
+  returnJson =<< liftIO (mkSpinResult (const True))
 
 postSetR :: Handler ()
 postSetR = do
