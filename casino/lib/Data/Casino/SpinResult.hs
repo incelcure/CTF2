@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveAnyClass #-}
+{-# OPTIONS_GHC -Wno-orphans #-}
 
 module Data.Casino.SpinResult where
 
@@ -6,15 +7,9 @@ import Data.Aeson
 import Test.QuickCheck.Arbitrary
 import Test.QuickCheck.Gen
 import Text.Printf (printf)
+import Data.Casino.User
 
 newtype SpinResult = SpinResult (Maybe Reward)
-  deriving stock (Show, Eq, Generic)
-  deriving anyclass (ToJSON)
-
-data Reward = Reward
-  { rewardType :: Text
-  , rewardValue :: Text
-  }
   deriving stock (Show, Eq, Generic)
   deriving anyclass (ToJSON)
 

@@ -25,5 +25,5 @@ main = do
     _ <- runResourceT $ flip runSqlPool p $ do
       runMigration migrateAll
       us :: [Entity CasinoUser] <- selectList [] []
-      when (null us) $ insert_ $ CasinoUser "test" 100 50
+      when (null us) $ insert_ $ CasinoUser "test" 100 50 []
     warp 3031 $ App p (fromString secr)
