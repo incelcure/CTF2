@@ -1,0 +1,70 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.28.0-standalone-strict/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: casino-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: casino
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: casino
+    spec:
+      containers:
+      - name: casino
+        image: localhost:5001/casino:latest
+        env:
+          - name: PROVIDER_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: DJANGO_SECRET_KEY
+                name: django-secret
+        envFrom:
+        - configMapRef:
+            name: postgres-config
+        - secretRef:
+            name: postgres-secret
+        ports:
+        - containerPort: 3031
+
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.28.0-standalone-strict/service-v1.json
+apiVersion: v1
+kind: Service
+metadata:
+  name: casino
+  labels:
+    app.kubernetes.io/name: casino
+spec:
+  selector:
+    app.kubernetes.io/name: casino
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3031
+  type: ClusterIP
+
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.28.0-standalone-strict/ingress-networking-v1.json
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: casino-ingress
+  labels:
+    app.kubernetes.io/name: casino-ingress
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: casino.backyard-hg.xyz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: casino
+                port:
+                  number: 80

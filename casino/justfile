@@ -1,0 +1,21 @@
+default:
+    @just --list
+
+docs:
+    echo http://127.0.0.1:8888
+    hoogle serve -p 8888 --local
+
+repl *ARGS:
+    cabal repl {{ARGS}}
+
+fmt:
+    treefmt
+
+do *ARGS:
+    ghcid -c "cabal repl lib:casino-lib" --warnings -T {{ARGS}}
+
+run:
+  POSTGRES_PASSWORD=passwd POSTGRES_USER=postgres \
+  POSTGRES_DB=postgres PROVIDER_SECRET=secret \
+  DEBUG=0 \
+  ghcid -c "cabal repl exe:casino" --warnings -T :main

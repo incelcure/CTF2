@@ -1,0 +1,8 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "exe:casino"
+    - path: "lib"
+      component: "lib:casino-lib"
+    - path: "test"
+      component: "test:casino-test"
