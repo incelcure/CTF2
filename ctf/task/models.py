@@ -37,3 +37,31 @@ class Attempt(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.task} - {'Correct' if self.correct else 'Incorrect'}"
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    color = models.CharField(max_length=7, default='#000000')
+    postfix = models.CharField(default="", null=True)
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
+
+
+# class Rewards(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     type = models.CharField(null=True)
+#     value = models.CharField()
+#
+#     def __str__(self):
+#         return f'{self.user.username} \n Rewards: \n\t Type: {self.type} \n\t Value: {self.value}'
+
+
+# def create_profile(sender, **kwargs):
+#     if kwargs['created']:
+#         Profile.objects.create(user=kwargs['instance'])
+#
+#
+# from django.db.models.signals import post_save
+#
+# post_save.connect(create_profile, sender=User)

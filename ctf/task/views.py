@@ -1,5 +1,8 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+import requests
 from django.db.models import Sum
 from django.contrib.auth import logout, login, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
@@ -12,6 +15,8 @@ from .models import *
 from .metrics import registration_counter, login_counter, attempt_counter
 # from .utils import TokenCache
 from .utils import get_user_token
+
+from .forms import ProfileForm
 
 
 def register_view(request):
@@ -77,9 +82,18 @@ def task_detail_view(request, task_id):
 
         attempt, created = Attempt.objects.get_or_create(user=user, task=task)
 
-        if correct and not attempt.correct:
+        if correct:
             attempt.correct = True
             attempt.save()
+
+            completed_attempts = Attempt.objects.filter(user=request.user, correct=True).select_related('task')
+            total_points = completed_attempts.aggregate(Sum('task__points'))['task__points__sum'] or 0
+            casino_set_json = {'secret': settings.SECRET_KEY, 'subj': user.username, 'value': total_points}
+            casino_set_url = f"http://{settings.CASINO_HOST}/api/set"
+
+            response = requests.post(casino_set_url, json=casino_set_json)
+            response.raise_for_status()
+
             messages.success(request,
                              f'И это правильный ответ! На ваш счет зачислено {task.points} баллов!\nКрутите барабан!')
         elif not attempt.correct:
@@ -100,9 +114,30 @@ def rules_view(request):
 
 @login_required
 def profile_view(request):
+    user = request.user
     completed_attempts = Attempt.objects.filter(user=request.user, correct=True).select_related('task')
     total_points = completed_attempts.aggregate(Sum('task__points'))['task__points__sum'] or 0
     completed_tasks = [attempt.task for attempt in completed_attempts]
+
+
+    # try:
+    #     response = requests.get(casino_get_url)
+    #     response.raise_for_status()
+    #     color_choices = response.json()
+    # except requests.exceptions.RequestException as e:
+    #     messages.error(request, f'Ошибка при получении списка цветов: {e}')
+    #     color_choices = []
+    #
+    # if request.method == 'POST':
+    #     form = ProfileForm(request.POST, color_choices=color_choices)
+    #     if form.is_valid():
+    #         color = form.cleaned_data['color']
+    #         user.profile.color = color
+    #         user.profile.save()
+    #         messages.success(request, 'Цвет профиля успешно обновлен!')
+    #         return redirect('profile')
+    # else:
+    #     form = ProfileForm(color_choices=color_choices)
 
     token = get_user_token(request, request.user.username)
     casino_url = f"{settings.CASINO_HOST}/auth/page/jwt?token={token}"
@@ -111,3 +146,33 @@ def profile_view(request):
         'total_points': total_points,
         'casino_url': casino_url,
     })
+
+
+@login_required
+def edit_profile_view(request):
+    user = request.user
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, color_choices=get_color_choices(request))
+        if form.is_valid():
+            color = form.cleaned_data['color']
+            user.profile.color = color
+            user.profile.save()
+            messages.success(request, 'Цвет профиля успешно обновлен!')
+            return redirect('profile')
+    else:
+        form = ProfileForm(color_choices=get_color_choices(request))
+
+    return render(request, 'task/edit_profile.html', {'form': form, 'user_color': user.profile.color})
+
+
+def get_color_choices(request):
+    token = get_user_token(request, request.user.username)
+    casino_get_url = f"http://{settings.CASINO_HOST}/api/rewards?token={token}"
+    try:
+        response = requests.get(casino_get_url)
+        response.raise_for_status()
+        rewards = response.json()
+        return [reward['rewardValue'] for reward in rewards if reward['rewardType'] == 'Color']
+    except requests.exceptions.RequestException as e:
+        messages.error(request, f'Ошибка при получении списка цветов: {e}')
+        return []

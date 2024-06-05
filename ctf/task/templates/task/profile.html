@@ -13,7 +13,11 @@
     <p>{{ task.title }} - {{ task.points }} баллов</p>
     {% endfor %}
 </ul>
+<h2>Изменить цвет профиля</h2>
+<a href="{% url 'edit_profile' %}">
+    <button>Редактировать профиль</button>
+</a>
 <h2>Рулетка</h2>
- <button onclick="location.href='{{ casino_url }}'">БАБЛО</button>
+<button onclick="location.href='{{ casino_url }}'">БАБЛО</button>
 
 {% endblock %}
