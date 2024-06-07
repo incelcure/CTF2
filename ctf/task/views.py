@@ -140,18 +140,20 @@ def profile_view(request):
 @login_required
 def edit_profile_view(request):
     user = request.user
+    profile, created = Profile.objects.get_or_create(user=user)
+
     if request.method == 'POST':
         form = ProfileForm(request.POST, color_choices=get_color_choices(request))
         if form.is_valid():
             color = form.cleaned_data['color']
-            user.profile.color = color
-            user.profile.save()
+            profile.color = color
+            profile.save()
             messages.success(request, 'Цвет профиля успешно обновлен!')
             return redirect('profile')
     else:
         form = ProfileForm(color_choices=get_color_choices(request))
 
-    return render(request, 'task/edit_profile.html', {'form': form, 'user_color': user.profile.color})
+    return render(request, 'task/edit_profile.html', {'form': form, 'user_color': profile.color})
 
 
 def get_color_choices(request):

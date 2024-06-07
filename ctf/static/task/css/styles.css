@@ -182,3 +182,24 @@ form button:hover {
     opacity: 0;
     transform: translateY(20px);
 }
+
+.color-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: #fff url("data:image/svg+xml;charset=UTF-8,%3Csvg viewBox='0 0 4 5' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 0L0 2h4L2 0zM2 5L0 3h4L2 5z' fill='%23999'/%3E%3C/svg%3E") no-repeat right 10px center;
+    background-size: 10px;
+}
+
+.color-option {
+    padding: 10px;
+}
+
+.color-option[data-color] {
+    background-color: var(--option-color);
+    color: white;
+}

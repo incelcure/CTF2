@@ -4,7 +4,28 @@
     <h1>Редактирование профиля</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <div class="form-group">
+            <label for="id_color">Выберите цвет</label>
+            <select name="color" id="id_color" class="color-select">
+                {% for value, display in form.color.field.choices %}
+                    <option value="{{ value }}" style="background-color: {{ display }}; color: {{ value }};">{{ display }}</option>
+                {% endfor %}
+            </select>
+        </div>
         <button type="submit">Сохранить</button>
     </form>
+
+<!--    <script>-->
+<!--        document.addEventListener('DOMContentLoaded', (event) => {-->
+<!--            const colorField = document.getElementById('id_color');-->
+
+<!--            const updateColor = () => {-->
+<!--                colorField.style.backgroundColor = colorField.value || 'transparent';-->
+<!--            };-->
+
+<!--            colorField.addEventListener('change', updateColor);-->
+
+<!--            updateColor();-->
+<!--        });-->
+<!--    </script>-->
 {% endblock %}
