@@ -79,7 +79,18 @@ def task_list_view(request):
     user_attempts = Attempt.objects.filter(user=request.user, correct=True).values_list('task_id', flat=True)
     solved_tasks = set(user_attempts)
 
-    return render(request, 'task/task_list.html', {'tasks': tasks, 'solved_tasks': solved_tasks})
+    easy_tasks = Task.objects.filter(points__lte=1)
+    medium_tasks = Task.objects.filter(points=2)
+    hard_tasks = Task.objects.filter(points=3)
+    mega_hard_tasks = Task.objects.filter(points__gte=4)
+
+    return render(request, 'task/task_list.html', {'tasks': tasks,
+                                                   'solved_tasks': solved_tasks,
+                                                   'easy_tasks': easy_tasks,
+                                                   'medium_tasks': medium_tasks,
+                                                   'hard_tasks': hard_tasks,
+                                                   'mega_hard_tasks': mega_hard_tasks,
+                                                   })
 
 
 @login_required(redirect_field_name='next', login_url='/login/')

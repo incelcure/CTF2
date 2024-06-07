@@ -47,7 +47,6 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.username} Profile'
 
-
 # class Rewards(models.Model):
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)
 #     type = models.CharField(null=True)

@@ -2,13 +2,56 @@
 
 {% block content %}
 <h1>TASKS</h1>
-<div class="task-grid">
-    {% for task in tasks %}
-    <div class="task-card {% if task.id in solved_tasks %}solved{% endif %}">
-        <h2>TASK {{ forloop.counter }}</h2>
-        <p>{{ task.title }}</p>
-        <a href="{% url 'task_detail' task.id %}">View Task</a>
+
+    <div class="task-category">
+        <h2>Easy Tasks</h2>
+        <div class="task-grid">
+            {% for task in easy_tasks %}
+            <div class="task-card {% if task.id in solved_tasks %}solved{% endif %}">
+                <h2>TASK {{ forloop.counter }}</h2>
+                <p>{{ task.title }}</p>
+                <a href="{% url 'task_detail' task.id %}">View Task</a>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-    {% endfor %}
-</div>
+
+    <div class="task-category">
+        <h2>Medium Tasks</h2>
+        <div class="task-grid">
+            {% for task in medium_tasks %}
+            <div class="task-card {% if task.id in solved_tasks %}solved{% endif %}">
+                <h2>TASK {{ forloop.counter }}</h2>
+                <p>{{ task.title }}</p>
+                <a href="{% url 'task_detail' task.id %}">View Task</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="task-category">
+        <h2>Hard Tasks</h2>
+        <div class="task-grid">
+            {% for task in hard_tasks %}
+            <div class="task-card {% if task.id in solved_tasks %}solved{% endif %}">
+                <h2>TASK {{ forloop.counter }}</h2>
+                <p>{{ task.title }}</p>
+                <a href="{% url 'task_detail' task.id %}">View Task</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="task-category">
+        <h2>Mega Hard Tasks</h2>
+        <div class="task-grid">
+            {% for task in mega_hard_tasks %}
+            <div class="task-card {% if task.id in solved_tasks %}solved{% endif %}">
+                <h2>TASK {{ forloop.counter }}</h2>
+                <p>{{ task.title }}</p>
+                <a href="{% url 'task_detail' task.id %}">View Task</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
