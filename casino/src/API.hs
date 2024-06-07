@@ -37,11 +37,12 @@ postSetR = do
   req <- requireCheckJsonBody
   s' <- getsYesod secret
   when (s' /= SR.secret req) $ permissionDenied ""
-  runDB $ do
-    k' <- getBy (UniqueUserName (SR.subj req))
-    case k' of
-      Just (Entity k _) -> update k [CasinoUserPoints =. SR.value req]
-      Nothing -> insert_ $ CasinoUser (SR.subj req) (SR.value req) 0 []
+  runDB $
+    void $
+      upsertBy
+        (UniqueUserName (SR.subj req))
+        (mkUser (SR.subj req) (SR.value req))
+        [CasinoUserPoints =. SR.value req]
 
 getSpinsR :: Handler Value
 getSpinsR = do

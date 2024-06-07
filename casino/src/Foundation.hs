@@ -7,7 +7,6 @@ import Data.Casino.User
 import Database.Persist.Postgresql
 import Yesod.Auth
 import Yesod.Auth.JWT
-import Yesod.Auth.Message (AuthMessage (InvalidKeyTitle))
 import Yesod.Core
 import Yesod.Form (FormMessage, defaultFormMessage)
 import Yesod.Persist
@@ -59,10 +58,8 @@ instance RenderMessage App FormMessage where
 instance YesodAuth App where
   type AuthId App = CasinoUserId
   authenticate creds = liftHandler $ runDB $ do
-    x <- getBy $ UniqueUserName $ credsIdent creds
-    return $ case x of
-      Just (Entity userid _) -> Authenticated userid
-      Nothing -> UserError InvalidKeyTitle
+    x <- insertBy $ mkUser (credsIdent creds) 0
+    return $ Authenticated $ either entityKey id x
 
   loginDest _ = HomeR
   logoutDest _ = HomeR

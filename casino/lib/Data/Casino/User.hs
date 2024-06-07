@@ -24,3 +24,6 @@ Reward
   value Text
   deriving Show Eq Generic ToJSON
 |]
+
+mkUser :: Text -> Int -> CasinoUser
+mkUser n p = CasinoUser n p 0 []
