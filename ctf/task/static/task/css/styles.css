@@ -218,3 +218,34 @@ form button:hover {
     background-color: var(--option-color);
     color: white;
 }
+
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    border: none;
+    color: white;
+}
+
+.btn-edit-profile {
+    background-color: #007bff;
+}
+
+.btn-edit-profile:hover {
+    background-color: #0056b3;
+}
+
+.btn-casino {
+    background-color: #28a745;
+}
+
+.btn-casino:hover {
+    background-color: #218838;
+}

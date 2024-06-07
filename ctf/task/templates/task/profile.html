@@ -1,7 +1,7 @@
 {% extends 'task/base.html' %}
 
 {% block content %}
-<h1 >Профиль пользователя {{ user.username }}</h1>
+<h1>Профиль пользователя {{ user.username }}</h1>
 
 <h2>Общая информация</h2>
 <p>Количество выполненных задач: {{ completed_tasks|length }}</p>
@@ -13,11 +13,9 @@
     <p>{{ task.title }} - {{ task.points }} баллов</p>
     {% endfor %}
 </ul>
-<h2>Изменить цвет профиля</h2>
-<a href="{% url 'edit_profile' %}">
-    <button>Редактировать профиль</button>
-</a>
+    <button class="btn btn-casino" onclick="location.href='{% url 'edit_profile' %}'">Редактировать профиль
+    </button>
 <h2>Рулетка</h2>
-<button onclick="location.href='{{ casino_url }}'">БАБЛО</button>
+<button onclick="location.href='{{ casino_url }}'" class="btn btn-casino">БАБЛО</button>
 
 {% endblock %}
