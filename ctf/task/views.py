@@ -59,9 +59,10 @@ def logout_view(request):
 
 def leaderboard_view(request):
     leaderboard = (Attempt.objects.filter(correct=True)
-                   .values('user__username')
+                   .values('user__username', 'user__profile__color')
                    .annotate(score=Sum('task__points'))
                    .order_by('-score'))
+
     return render(request, 'task/leaderboard.html', {'leaderboard': leaderboard})
 
 

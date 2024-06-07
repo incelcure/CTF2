@@ -16,7 +16,7 @@
                 <li><a href="{% url 'rules' %}">Rules</a></li>
                 <li><a href="{% url 'leaderboard' %}">Leaderboard</a></li>
                 {% if user.is_authenticated %}
-                <li>Welcome, {{ user.username }}!</li>
+                <li  style="color: {{ user.profile.color }}">Welcome, {{ user.username }}!</li>
                 <li><a href="{% url 'profile' %}">Profile</a></li>
                 <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}

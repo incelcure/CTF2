@@ -12,7 +12,7 @@
     <tbody>
         {% for entry in leaderboard %}
         <tr>
-            <td>{{ entry.user__username }}</td>
+            <td style="color: {{ entry.user__profile__color }}">{{ entry.user__username }}</td>
             <td>{{ entry.score }}</td>
         </tr>
         {% endfor %}
