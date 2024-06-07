@@ -12,7 +12,7 @@ import pickle
 
 from .forms import UserRegisterForm
 from .models import *
-from .metrics import registration_counter, login_counter, attempt_counter
+from .metrics import registration_counter, login_counter, attempt_counter, success_counter
 # from .utils import TokenCache
 from .utils import get_user_token
 
@@ -109,6 +109,8 @@ def task_detail_view(request, task_id):
         if correct:
             attempt.correct = True
             attempt.save()
+
+            success_counter.labels(task_title=f"{task.title}").inc()
 
             completed_attempts = Attempt.objects.filter(user=request.user, correct=True).select_related('task')
             total_points = completed_attempts.aggregate(Sum('task__points'))['task__points__sum'] or 0

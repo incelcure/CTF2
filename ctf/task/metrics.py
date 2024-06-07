@@ -4,6 +4,7 @@ registration_counter = Counter('django_user_registrations_total', 'Total number 
 login_counter = Counter('django_user_logins_total', 'Total number of user logins')
 
 attempt_counter = Counter('django_task_attempts_total', 'Total number of task attempts')
+success_counter = Counter('django_task_attempts_success', 'Total number of success attempts', ['task_title'])
 
 request_latency_histogram = Histogram('django_request_latency_seconds', 'Histogram of request processing time',
                                       ['method', 'endpoint'])
