@@ -47,7 +47,7 @@ def login_view(request):
                 completed_attempts = Attempt.objects.filter(user=request.user, correct=True).select_related('task')
                 total_points = completed_attempts.aggregate(Sum('task__points'))['task__points__sum'] or 0
                 casino_set_json = {'secret': settings.SECRET_KEY, 'subj': user.username, 'value': total_points}
-                casino_set_url = f"http://{settings.CASINO_HOST}/api/set"
+                casino_set_url = f"{settings.CASINO_HOST}/api/set"
                 response = requests.post(casino_set_url, json=casino_set_json)
                 response.raise_for_status()
 
@@ -112,7 +112,7 @@ def task_detail_view(request, task_id):
             completed_attempts = Attempt.objects.filter(user=request.user, correct=True).select_related('task')
             total_points = completed_attempts.aggregate(Sum('task__points'))['task__points__sum'] or 0
             casino_set_json = {'secret': settings.SECRET_KEY, 'subj': user.username, 'value': total_points}
-            casino_set_url = f"http://{settings.CASINO_HOST}/api/set"
+            casino_set_url = f"{settings.CASINO_HOST}/api/set"
 
             response = requests.post(casino_set_url, json=casino_set_json)
             response.raise_for_status()
@@ -172,7 +172,7 @@ def edit_profile_view(request):
 
 def get_color_choices(request):
     token = get_user_token(request, request.user.username)
-    casino_get_url = f"http://{settings.CASINO_HOST}/api/rewards?token={token}"
+    casino_get_url = f"{settings.CASINO_HOST}/api/rewards?token={token}"
     try:
         response = requests.get(casino_get_url)
         response.raise_for_status()
