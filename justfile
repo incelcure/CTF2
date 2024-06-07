@@ -19,3 +19,15 @@ decrypt:
 
 apply-secrets:
   for f in $(ls infra/*-secret.yaml.gpg); do gpg -q --decrypt --batch $f | kubectl apply -f -; done
+
+get-pg-password:
+  gpg -q --decrypt --batch infra/postgres-secret.yaml.gpg | yq '.stringData.POSTGRES_PASSWORD' - --yaml-output | less
+
+rerun-load-tasks:
+  kubectl delete -f infra/django-load-tasks.yaml && kubectl apply -f infra/django-load-tasks.yaml
+
+push-images-to target="blueberry":
+  nix copy --to ssh://{{target}} .#image-casino .#image-ctf && rsync . {{target}}:ctf -azv
+
+restart image="ctf" deployment="django":
+  just push-image {{image}}; kubectl rollout restart deployment {{deployment}}-deployment; kubectl rollout status deployment {{deployment}}-deployment
