@@ -43,6 +43,14 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 login_counter.inc()
+
+                completed_attempts = Attempt.objects.filter(user=request.user, correct=True).select_related('task')
+                total_points = completed_attempts.aggregate(Sum('task__points'))['task__points__sum'] or 0
+                casino_set_json = {'secret': settings.SECRET_KEY, 'subj': user.username, 'value': total_points}
+                casino_set_url = f"http://{settings.CASINO_HOST}/api/set"
+                response = requests.post(casino_set_url, json=casino_set_json)
+                response.raise_for_status()
+
                 return redirect('task_list')
             else:
                 messages.error(request, 'Invalid username or password.')
@@ -119,26 +127,6 @@ def profile_view(request):
     completed_attempts = Attempt.objects.filter(user=request.user, correct=True).select_related('task')
     total_points = completed_attempts.aggregate(Sum('task__points'))['task__points__sum'] or 0
     completed_tasks = [attempt.task for attempt in completed_attempts]
-
-
-    # try:
-    #     response = requests.get(casino_get_url)
-    #     response.raise_for_status()
-    #     color_choices = response.json()
-    # except requests.exceptions.RequestException as e:
-    #     messages.error(request, f'Ошибка при получении списка цветов: {e}')
-    #     color_choices = []
-    #
-    # if request.method == 'POST':
-    #     form = ProfileForm(request.POST, color_choices=color_choices)
-    #     if form.is_valid():
-    #         color = form.cleaned_data['color']
-    #         user.profile.color = color
-    #         user.profile.save()
-    #         messages.success(request, 'Цвет профиля успешно обновлен!')
-    #         return redirect('profile')
-    # else:
-    #     form = ProfileForm(color_choices=color_choices)
 
     token = get_user_token(request, request.user.username)
     casino_url = f"{settings.CASINO_HOST}/auth/page/jwt?token={token}"
