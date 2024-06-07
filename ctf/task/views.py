@@ -74,6 +74,7 @@ def leaderboard_view(request):
     return render(request, 'task/leaderboard.html', {'leaderboard': leaderboard})
 
 
+@login_required(redirect_field_name='next', login_url='/login/')
 def task_list_view(request):
     tasks = Task.objects.all()
     user_attempts = Attempt.objects.filter(user=request.user, correct=True).values_list('task_id', flat=True)
