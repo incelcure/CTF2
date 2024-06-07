@@ -91,6 +91,11 @@ footer {
     transform: scale(1.05);
 }
 
+.task-card.solved {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -167,7 +172,7 @@ form button:hover {
 }
 
 .alert.error {
-    color: #a94442;
+    color: #a94442;а
     background-color: #f2dede;
     border-color: #ebccd1;
 }

@@ -4,7 +4,7 @@
 <h1>TASKS</h1>
 <div class="task-grid">
     {% for task in tasks %}
-    <div class="task-card">
+    <div class="task-card {% if task.id in solved_tasks %}solved{% endif %}">
         <h2>TASK {{ forloop.counter }}</h2>
         <p>{{ task.title }}</p>
         <a href="{% url 'task_detail' task.id %}">View Task</a>
