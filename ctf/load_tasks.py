@@ -27,14 +27,17 @@ def load_tasks():
         tasks_data = json.loads(file_data)
 
         for task_id, task_data in tasks_data.items():
+            defaults = {
+                'description': task_data['description'],
+                'answer': task_data['answer'],
+                'points': task_data['points'],
+            }
+            if 'file_name' in task_data:
+                defaults['file_name'] = task_data['file_name']
+
             Task.objects.update_or_create(
                 title=task_data['title'],
-                defaults={
-                    'description': task_data['description'],
-                    'answer': task_data['answer'],
-                    'points': task_data['points'],
-                    'file_name': task_data['file_name'],
-                }
+                defaults=defaults
             )
         print('Successfully loaded tasks from JSON file')
     except Exception as e:
