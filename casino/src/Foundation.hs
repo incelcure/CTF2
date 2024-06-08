@@ -26,6 +26,7 @@ mkYesodData
   [parseRoutes|
 /          HomeR GET
 /api/spins SpinsR GET
+/api/bonus BonusR POST
 /api/spin  SpinR POST
 /api/set   SetR POST
 /api/rewards RewardsR GET

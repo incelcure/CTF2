@@ -2,6 +2,7 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE RecordWildCards #-}
 
 module Data.Casino.User where
 
@@ -16,6 +17,7 @@ CasinoUser
   name Text
   points Int
   spent Int
+  bonus Int
   rewards [RewardId]
   UniqueUserName name
   deriving Show
@@ -26,4 +28,7 @@ Reward
 |]
 
 mkUser :: Text -> Int -> CasinoUser
-mkUser n p = CasinoUser n p 0 []
+mkUser n p = CasinoUser n p 0 0 []
+
+spinsLeft :: CasinoUser -> Int
+spinsLeft CasinoUser{..} = casinoUserPoints + casinoUserBonus - casinoUserSpent
