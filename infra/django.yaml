@@ -18,7 +18,7 @@ spec:
         image: localhost:5001/ctf:latest
         envFrom:
         - configMapRef:
-            name: django-dev-settings
+            name: django-prod-settings
         - configMapRef:
             name: postgres-config
         - secretRef:
