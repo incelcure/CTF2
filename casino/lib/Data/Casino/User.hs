@@ -1,8 +1,8 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE UndecidableInstances #-}
-{-# LANGUAGE RecordWildCards #-}
 
 module Data.Casino.User where
 
@@ -31,4 +31,4 @@ mkUser :: Text -> Int -> CasinoUser
 mkUser n p = CasinoUser n p 0 0 []
 
 spinsLeft :: CasinoUser -> Int
-spinsLeft CasinoUser{..} = casinoUserPoints + casinoUserBonus - casinoUserSpent
+spinsLeft CasinoUser {..} = casinoUserPoints + casinoUserBonus - casinoUserSpent

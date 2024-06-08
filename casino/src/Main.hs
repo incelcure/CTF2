@@ -5,6 +5,8 @@ import Data.Casino.User
 import Data.String.Interpolate
 import Database.Persist.Postgresql
 import Foundation
+import Network.Wai.Handler.Warp
+import Network.Wai.Middleware.Prometheus
 import System.Environment (getEnv)
 import Yesod.Core
 import Yesod.Static
@@ -31,6 +33,13 @@ main = do
   runStderrLoggingT $ withPostgresqlPool connectionString openConnectionCount $ \p -> liftIO $ do
     _ <- runResourceT $ flip runSqlPool p $ do
       runMigration migrateAll
-      us :: [Entity CasinoUser] <- selectList [] []
-      when (null us) $ insert_ $ mkUser "test" 100
-    warp 3031 $ App p (fromString secr) stat
+      when d $ do
+        us :: [Entity CasinoUser] <- selectList [] []
+        when (null us) $ insert_ $ mkUser "test" 100
+    app <- toWaiApp $ App p (fromString secr) stat
+    let settings =
+          setPort 3031
+            . setServerName "Warp + Yesod (core)"
+            $ defaultSettings
+    let middleware = instrumentApp "casino"
+    runSettings settings $ middleware app

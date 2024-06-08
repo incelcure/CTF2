@@ -1,4 +1,5 @@
 {-# LANGUAGE NamedFieldPuns #-}
+
 module API where
 
 import Data.Casino.SetRequest qualified as SR
@@ -58,10 +59,12 @@ postBonusR = do
     t <- hoistMaybe =<< lift (lookupGetParam "token")
     n <- hoistMaybe $ JWT.sub . JWT.claims =<< JWT.decodeAndVerifySignature v t
     t' <- hoistMaybe =<< lift (runDB $ getBy $ UniqueUserName $ show n)
-    bonus <- hoistMaybe . (readMaybe . toString =<<) =<< lift (lookupGetParam "bonus")
+    bonus <-
+      hoistMaybe . (readMaybe . toString =<<) =<< lift (lookupGetParam "bonus")
     return (t', bonus)
   (u, bonus) <- maybe (permissionDenied "") return res
-  CasinoUser {casinoUserBonus} <- runDB $ updateGet (entityKey u) [CasinoUserBonus +=. bonus]
+  CasinoUser {casinoUserBonus} <-
+    runDB $ updateGet (entityKey u) [CasinoUserBonus +=. bonus]
   return $ object ["total" .= casinoUserBonus]
 
 getRewardsR :: Handler Value

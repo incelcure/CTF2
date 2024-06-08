@@ -32,12 +32,14 @@ mkYesodData
 /api/rewards RewardsR GET
 /auth      AuthR Auth getAuth
 /static    StaticR Static appStatic
+/metrics   MetricsR GET
 |]
 
 instance Yesod App where
   isAuthorized HomeR _ = isLoggedIn
   isAuthorized SpinR _ = isLoggedIn
   isAuthorized SpinsR _ = isLoggedIn
+  isAuthorized MetricsR _ = isNotBehindProxy
   isAuthorized _ _ = return Authorized
 
 instance YesodPersist App where
@@ -45,6 +47,11 @@ instance YesodPersist App where
   runDB action = do
     p <- getsYesod pool
     runSqlPool action p
+
+isNotBehindProxy :: HandlerFor App AuthResult
+isNotBehindProxy = do
+  h <- lookupHeader "X-Forwarded-For"
+  return $ if isNothing h then Authorized else Unauthorized "behind proxy"
 
 isLoggedIn :: HandlerFor App AuthResult
 isLoggedIn = do

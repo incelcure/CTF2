@@ -2,8 +2,12 @@ module Routes where
 
 import Database.Persist
 import Foundation
+import Prometheus
 import Yesod.Auth
 import Yesod.Core
+
+getMetricsR :: Handler Text
+getMetricsR = decodeUtf8 <$> liftIO exportMetricsAsText
 
 onclick :: JavascriptUrl (Route App)
 onclick =

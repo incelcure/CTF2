@@ -1,14 +1,12 @@
-cabal-version: 2.4
-name:          casino
-version:       0.1.0.0
-copyright:     2024 head-hardener
-maintainer:    trashbin2019np@gmail.com
-author:        Head Gardener
-synopsis:      casino
-category:      Web
-
-extra-source-files:
-  static/styles.css
+cabal-version:      2.4
+name:               casino
+version:            0.1.0.0
+copyright:          2024 head-hardener
+maintainer:         trashbin2019np@gmail.com
+author:             Head Gardener
+synopsis:           casino
+category:           Web
+extra-source-files: static/styles.css
 
 -- description:
 
@@ -120,9 +118,9 @@ executable casino
     TemplateHaskell
 
   other-modules:
+    API
     Application
     Foundation
-    API
     Routes
 
   main-is:            Main.hs
@@ -130,6 +128,10 @@ executable casino
   hs-source-dirs:     src
   build-depends:
     , casino-lib
+    , prometheus-client
+    , wai
+    , wai-middleware-prometheus
+    , warp
     , yesod-auth
     , yesod-core
     , yesod-form
