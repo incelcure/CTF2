@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>{{ task.title }}</h1>
-<p>{{ task.description }}</p>
+<p>{{ task.description|linebreaksbr }}</p>
 {% if task.file_url %}
     <p><a href="{{ task.file_url }}" target="_blank">Download file</a></p>
     <p><img src="{{ task.file_url }}" alt="{{ task.title }}" style="max-width: 100%; height: auto;"></p>
