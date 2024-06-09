@@ -102,7 +102,7 @@ def task_detail_view(request, task_id):
     if request.method == 'POST':
         user_answer = request.POST.get('answer')
         correct = user_answer == task.answer
-        attempt_counter.inc()
+        attempt_counter.labels(task_title=f"{task.title}").inc()
 
         attempt, created = Attempt.objects.get_or_create(user=user, task=task)
 
