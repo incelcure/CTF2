@@ -7,7 +7,6 @@ import Data.Casino.User
 import Database.Persist.Postgresql
 import Yesod.Auth
 import Yesod.Auth.JWT
-import Yesod.Auth.Message (AuthMessage (InvalidKeyTitle))
 import Yesod.Core
 import Yesod.Form (FormMessage, defaultFormMessage)
 import Yesod.Persist
@@ -27,17 +26,20 @@ mkYesodData
   [parseRoutes|
 /          HomeR GET
 /api/spins SpinsR GET
+/api/bonus BonusR POST
 /api/spin  SpinR POST
 /api/set   SetR POST
 /api/rewards RewardsR GET
 /auth      AuthR Auth getAuth
 /static    StaticR Static appStatic
+/metrics   MetricsR GET
 |]
 
 instance Yesod App where
   isAuthorized HomeR _ = isLoggedIn
   isAuthorized SpinR _ = isLoggedIn
   isAuthorized SpinsR _ = isLoggedIn
+  isAuthorized MetricsR _ = isNotBehindProxy
   isAuthorized _ _ = return Authorized
 
 instance YesodPersist App where
@@ -45,6 +47,11 @@ instance YesodPersist App where
   runDB action = do
     p <- getsYesod pool
     runSqlPool action p
+
+isNotBehindProxy :: HandlerFor App AuthResult
+isNotBehindProxy = do
+  h <- lookupHeader "X-Forwarded-For"
+  return $ if isNothing h then Authorized else Unauthorized "behind proxy"
 
 isLoggedIn :: HandlerFor App AuthResult
 isLoggedIn = do
@@ -59,10 +66,8 @@ instance RenderMessage App FormMessage where
 instance YesodAuth App where
   type AuthId App = CasinoUserId
   authenticate creds = liftHandler $ runDB $ do
-    x <- getBy $ UniqueUserName $ credsIdent creds
-    return $ case x of
-      Just (Entity userid _) -> Authenticated userid
-      Nothing -> UserError InvalidKeyTitle
+    x <- insertBy $ mkUser (credsIdent creds) 0
+    return $ Authenticated $ either entityKey id x
 
   loginDest _ = HomeR
   logoutDest _ = HomeR

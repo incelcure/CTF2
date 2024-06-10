@@ -2,8 +2,12 @@ module Routes where
 
 import Database.Persist
 import Foundation
+import Prometheus
 import Yesod.Auth
 import Yesod.Core
+
+getMetricsR :: Handler Text
+getMetricsR = decodeUtf8 <$> liftIO exportMetricsAsText
 
 onclick :: JavascriptUrl (Route App)
 onclick =
@@ -37,8 +41,8 @@ getSpins =
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
-  setTitle "Casino"
   _ <- maybe (permissionDenied "") (return . entityVal) =<< maybeAuth
+  setTitle "Casino"
   r <- getUrlRenderParams
   [whamlet|
       <p #spins>

@@ -26,6 +26,7 @@ build/
 # Miscellaneous
 *.log
 .DS_Store
+migrations/
 
 venv
 venv*

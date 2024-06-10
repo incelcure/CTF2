@@ -19,8 +19,8 @@ mkSpinResult = generate . suchThat arbitrary
 instance Arbitrary SpinResult where
   arbitrary =
     frequency
-      [ (1, return $ SpinResult Nothing)
-      , (2, SpinResult . Just <$> arbitrary)
+      [ (10, return $ SpinResult Nothing)
+      , (1, SpinResult . Just <$> arbitrary)
       ]
 
 instance Arbitrary Reward where

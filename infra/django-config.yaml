@@ -4,6 +4,7 @@ metadata:
   name: django-dev-settings
 data:
   ALLOWED_HOSTS: "*"
+  CASINO_HOST: "https://casino.backyard-hg.xyz"
   CSRF_TRUSTED_ORIGINS: 'https://ctf.backyard-hg.xyz'
   UNRESTRICT_INTERFACES: '1'
   DJANGO_DEBUG: '1'
@@ -16,6 +17,7 @@ metadata:
   name: django-prod-settings
 data:
   ALLOWED_HOSTS: "ctf.backyard-hg.xyz"
+  CASINO_HOST: "https://casino.backyard-hg.xyz"
   CSRF_TRUSTED_ORIGINS: 'https://ctf.backyard-hg.xyz'
   UNRESTRICT_INTERFACES: '1'
   DJANGO_DEBUG: '0'
