@@ -105,7 +105,7 @@
         };
 
       flake = {
-        hydraJobs.build-image = inputs.self.packages.x86_64-linux.server;
+        hydraJobs.build-image = inputs.self.packages.x86_64-linux.image-ctf;
       };
     };
 }

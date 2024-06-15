@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minio-config
+data:
+  MINIO_URL: s3.backyard-hg.xyz
+  MINIO_BUCKET: ctf
